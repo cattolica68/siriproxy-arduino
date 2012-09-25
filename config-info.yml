@@ -1,0 +1,10 @@
+#Example configuration options that can be placed in your main SiriProxy config.yml
+
+##########################
+#NOTICE: Modifying these options in this file has no effect. You must put them in SiriProxy's config.yml!
+##########################
+    
+    - name: 'Arduino'
+      git: 'git://github.com/mongo527/siriproxy-Arduino.git'
+      arduino_host: '127.0.0.1' # IP of SickBeard Server
+      arduino_port: '8081' # Port SickBeard runs on
