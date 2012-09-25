@@ -16,25 +16,25 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         @port = config["arduino_port"]
     end
     
-    listen_for /(turn on (.*) | turn (.*) on | switch on (.*) | switch (.*) on)/i do |response|
+    listen_for /(turn on (.+) | turn (.+) on)/i do |response|
         begin
+        	say response, spoken ""
             if(response.downcase.include? "dining room")
         		if(response.downcase.include? "lights")
             		server = arduinoParser("DRLights", "ON")
+            		if(server.code == "200")
+            			say "The Dining Room Lights are now ON!"
+            		end
             	end
             
             elsif(response.downcase.include? "office")
         		if(response.downcase.include? "fan")
         			server = arduinoParser("OfficeFan", "ON")
+        			if(server.code == "200")
+        				say "The Office Fan is now ON!"
+        			end
         		end
         	end
-            
-            if(server.code == "200")
-            	say "The #{response} are now on!"
-            
-            else
-            	say "Sorry there was a problem"
-            end 
             	
         rescue Errno::EHOSTUNREACH
             say "Sorry, I could not connect to your Arduino."
@@ -48,25 +48,24 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         request_completed
     end
     
-    listen_for /(turn off (.*) | turn (.*) off | switch off (.*) | switch (.*) off)/i do |response|
+    listen_for /(turn off (.+) | turn (.+) off)/i do |response|
         begin
         	if(response.downcase.include? "dining room")
         		if(response.downcase.include? "lights")
         			server = arduinoParser("DRLights", "OFF")
+        			if(server.code == "200")
+        				say "The Dining Room Lights are now OFF!"
+        			end
         		end
         	
         	elsif(response.downcase.include? "office")
         		if(response.downcase.include? "fan")
         			server = arduinoParser("OfficeFan", "OFF")
+        			if(server.code == "200")
+        				say "The Office Fan is now OFF!"
+        			end
         		end
         	end
-        	
-        	if(server.code == "200")
-            	say "The #{response} are now on!"
-            
-            else
-            	say "Sorry there was a problem"
-            end 
             	
         rescue Errno::EHOSTUNREACH
             say "Sorry, I could not connect to your Arduino."
