@@ -18,7 +18,6 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
     
     listen_for /(turn on (.+) | turn (.+) on)/i do |response|
         begin
-        	say response, spoken ""
             if(response.downcase.include? "dining room")
         		if(response.downcase.include? "lights")
             		server = arduinoParser("DRLights", "ON")
@@ -35,6 +34,8 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         			end
         		end
         	end
+        	
+        	say "#{response}" , spoken ""
             	
         rescue Errno::EHOSTUNREACH
             say "Sorry, I could not connect to your Arduino."
