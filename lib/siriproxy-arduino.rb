@@ -16,7 +16,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         @port = config["arduino_port"]
     end
     
-    listen_for /(turn on (.*) | turn (.*) on)/i do |response|
+    listen_for /(turn on (.*) | turn (.*) on | switch on (.*) | switch (.*) on)/i do |response|
         begin
             if(response.downcase.include? "dining room")
         		if(response.downcase.include? "lights")
@@ -29,7 +29,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         		end
         	end
             
-            if(server.code == 200)
+            if(server.code == "200")
             	say "The #{response} are now on!"
             
             else
@@ -48,7 +48,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         request_completed
     end
     
-    listen_for /(turn off (.*) | turn (.*) off)/i do |response|
+    listen_for /(turn off (.*) | turn (.*) off | switch off (.*) | switch (.*) off)/i do |response|
         begin
         	if(response.downcase.include? "dining room")
         		if(response.downcase.include? "lights")
@@ -61,7 +61,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         		end
         	end
         	
-        	if(server.code == 200)
+        	if(server.code == "200")
             	say "The #{response} are now on!"
             
             else
