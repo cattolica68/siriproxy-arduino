@@ -16,7 +16,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         @port = config["arduino_port"]
     end
     
-    listen_for /hello (arduino|circuit board)/i do |response|
+    listen_for /(turn on (.*) | turn (.*) on)/i do |response|
         begin
             if(response.downcase.include? "dining room")
         		if(response.downcase.include? "lights")
