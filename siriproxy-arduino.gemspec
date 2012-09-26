@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "siriproxy-arduino"
-  s.version     = "0.0.3" 
+  s.version     = "0.0.2" 
   s.authors     = ["mongo527"]
   s.email       = [""]
   s.homepage    = ""

@@ -18,23 +18,23 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
     
     listen_for /(turn (on|on the) (.+)|turn the (.+) on)/i do |response|
         begin
-            if(response.downcase.include? "dining room")
-                if(response.downcase.include? "lights")
-	            		server = arduinoParser("DRLights", "ON")
-	            		if(server.code == "200")
-            				say "The Dining Room Lights are now ON!"
-	            		end
-	            	end
+            if response.downcase.include? "dining room"
+                if response.downcase.include? "lights"
+                    server = arduinoParser("DRLights", "ON")
+                    if server.code == "200"
+                        say "The Dining Room Lights are now ON!"
+                    end
+                end
             
-            elsif(response.downcase.include? "office")
-        		if(response.downcase.include? "fan")
-        			server = arduinoParser("OfficeFan", "ON")
-        			if(server.code == "200")
-        				say "The Office Fan is now ON!"
-        			end
-        		end
-        	end
-            	
+            elsif response.downcase.include? "office"
+                if response.downcase.include? "fan"
+                    server = arduinoParser("OfficeFan", "ON")
+                    if server.code == "200"
+                        say "The Office Fan is now ON!"
+                    end
+                end
+            end
+            
         rescue Errno::EHOSTUNREACH
             say "Sorry, I could not connect to your Arduino."
         rescue Errno::ECONNREFUSED
@@ -49,23 +49,23 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
     
     listen_for /(turn (off|off the) (.+)|turn the (.+) off)/i do |response|
         begin
-        	if(response.downcase.include? "dining room")
-        		if(response.downcase.include? "lights")
-        			server = arduinoParser("DRLights", "OFF")
-        			if(server.code == "200")
-        				say "The Dining Room Lights are now OFF!"
-        			end
-        		end
-        	
-        	elsif(response.downcase.include? "office")
-        		if(response.downcase.include? "fan")
-        			server = arduinoParser("OfficeFan", "OFF")
-        			if(server.code == "200")
-        				say "The Office Fan is now OFF!"
-        			end
-        		end
-        	end
-            	
+            if response.downcase.include? "dining room"
+                if response.downcase.include? "lights"
+                    server = arduinoParser("DRLights", "OFF")
+                    if server.code == "200"
+                        say "The Dining Room Lights are now OFF!"
+                    end
+                end
+            
+            elsif response.downcase.include? "office"
+                if response.downcase.include? "fan"
+                    server = arduinoParser("OfficeFan", "OFF")
+                    if server.code == "200"
+                        say "The Office Fan is now OFF!"
+                    end
+                end
+            end
+                
         rescue Errno::EHOSTUNREACH
             say "Sorry, I could not connect to your Arduino."
         rescue Errno::ECONNREFUSED
@@ -75,8 +75,8 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         rescue Errno::ETIMEDOUT
             say "Sorry, The operation timed out."
         end
-		request_completed
-	end
+        request_completed
+    end
 
     def arduinoParser(dvc, cmd)
         

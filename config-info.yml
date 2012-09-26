@@ -5,6 +5,6 @@
 ##########################
     
     - name: 'Arduino'
-      git: 'git://github.com/mongo527/siriproxy-Arduino.git'
-      arduino_host: '127.0.0.1' # IP of SickBeard Server
-      arduino_port: '8081' # Port SickBeard runs on
+      git: 'git://github.com/mongo527/siriproxy-arduino.git'
+      arduino_host: '[Enter Arduino IP]' # IP of Arduino with Ethernet Shield
+      arduino_port: '[Enter Arduino Port]' # Port Arduino is using
