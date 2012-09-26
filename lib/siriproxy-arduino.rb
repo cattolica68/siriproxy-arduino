@@ -35,7 +35,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         		end
         	end
         	
-        	say "#{response}", spoken " "
+        	say "#{response}", spoken: " "
             	
         rescue Errno::EHOSTUNREACH
             say "Sorry, I could not connect to your Arduino."
