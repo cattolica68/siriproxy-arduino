@@ -16,7 +16,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         @port = config["arduino_port"]
     end
     
-    listen_for /(turn on (.+) | turn (.+) on)/i do |response|
+    listen_for /(turn (on|on the) (.+)|turn the (.+) on)/i do |response|
         begin
             if(response.downcase.include? "dining room")
                 if(response.downcase.include? "lights")
@@ -47,7 +47,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         request_completed
     end
     
-    listen_for /(turn off (.+) | turn (.+) off)/i do |response|
+    listen_for /(turn (off|off the) (.+)|turn the (.+) off)/i do |response|
         begin
         	if(response.downcase.include? "dining room")
         		if(response.downcase.include? "lights")
