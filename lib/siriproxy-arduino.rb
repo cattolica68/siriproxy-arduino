@@ -3,6 +3,7 @@ require 'siri_objects'
 require 'open-uri'
 require 'json'
 require 'net/http'
+require 'mysql'
 
 #############
 # This is a plugin for SiriProxy that will allow you to control x10 Devices with Arduino.
@@ -14,7 +15,14 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
     def initialize(config)
         @host = config["arduino_host"]
         @port = config["arduino_port"]
+        @mysqlHost = config["mysql_host"]
+        @mysqlUser = config["mysql_user"]
+        @mysqlPass = config["mysql_pass"]
+        @mysqlDB = config["mysql_db"]
+        @mysqlTable = config["mysql_table"]
     end
+    
+    con = Mysql.real_connect(mysqlHost, mysqlUser, mysqlPass, mysqlDB)
     
     listen_for /(turn (on|on the) (.+)|turn the (.+) on)/i do |response|
         begin
@@ -23,6 +31,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
                     server = arduinoParser("DRLights", "ON")
                     if server.code == "200"
                         say "The Dining Room Lights are now ON!"
+                        con.query("UPDATE " + @mysqlTable + " SET status='ON' WHERE device='Dining Lights'")
                     end
                 end
             
@@ -31,6 +40,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
                     server = arduinoParser("OfficeFan", "ON")
                     if server.code == "200"
                         say "The Office Fan is now ON!"
+                        con.query("UPDATE " + @mysqlTable + " SET status='ON' WHERE device='Office Fan'")
                     end
                 end
             end
@@ -54,6 +64,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
                     server = arduinoParser("DRLights", "OFF")
                     if server.code == "200"
                         say "The Dining Room Lights are now OFF!"
+                        con.query("UPDATE " + @mysqlTable + " SET status='OFF' WHERE device='Dining Lights'")
                     end
                 end
             
@@ -62,6 +73,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
                     server = arduinoParser("OfficeFan", "OFF")
                     if server.code == "200"
                         say "The Office Fan is now OFF!"
+                        con.query("UPDATE " + @mysqlTable + " SET status='OFF' WHERE device='Office Fan'")
                     end
                 end
             end
@@ -85,4 +97,6 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         
         return resp;
     end
+    
+    con.close
 end
