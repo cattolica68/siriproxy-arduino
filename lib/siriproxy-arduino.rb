@@ -16,7 +16,7 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         @port = config["arduino_port"]
     end
     
-    x10 = Hash['dining room lights', "DRLights", 'front porch lights', "FrontPorchLights"]
+    x10 = Hash['dining room light', "DRLights", 'front porch light', "FrontPorchLights"]
     
     listen_for /((turn (on|on the|off|off the) (.+))|(turn the (.+) (on|off)))/i do |response|
         begin
