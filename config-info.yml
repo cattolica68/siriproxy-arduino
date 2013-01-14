@@ -8,8 +8,3 @@
       git: 'git://github.com/mongo527/siriproxy-arduino.git'
       arduino_host: '[Enter Arduino IP]' # IP of Arduino with Ethernet Shield
       arduino_port: '[Enter Arduino Port]' # Port Arduino is using
-      mysql_host:   '[Enter MySQL IP]' # IP of MySQL Database
-      mysql_user:   '[Enter MySQL Username]' # Username for MySQL
-      mysql_pass:   '[Enter MySQL Password]' # Password for MySQL
-      mysql_db:     '[Enter MySQL DB]' # Database to use
-      mysql_table:  '[Enter MySQL Table]' # Table to use

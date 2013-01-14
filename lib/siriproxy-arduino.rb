@@ -3,7 +3,6 @@ require 'siri_objects'
 require 'open-uri'
 require 'json'
 require 'net/http'
-require 'mysql'
 
 #############
 # This is a plugin for SiriProxy that will allow you to control x10 Devices with Arduino.
@@ -15,69 +14,23 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
     def initialize(config)
         @host = config["arduino_host"]
         @port = config["arduino_port"]
-        @mysqlHost = config["mysql_host"]
-        @mysqlUser = config["mysql_user"]
-        @mysqlPass = config["mysql_pass"]
-        @mysqlDB = config["mysql_db"]
-        @mysqlTable = config["mysql_table"]
     end
     
-    con = Mysql.real_connect(mysqlHost, mysqlUser, mysqlPass, mysqlDB)
+    x10 = Hash['dining room lights', "DRLights", 'dining room light', "DRLights", 'front porch lights', "FrontPorchLights", 'front porch light', "FrontPorchLights"]
     
-    listen_for /(turn (on|on the) (.+)|turn the (.+) on)/i do |response|
+    listen_for /(turn (on|on the) (.+)|turn the (.+) (on|off))/i do |response|
         begin
-            if response.downcase.include? "dining room"
-                if response.downcase.include? "lights"
-                    server = arduinoParser("DRLights", "ON")
-                    if server.code == "200"
-                        say "The Dining Room Lights are now ON!"
-                        con.query("UPDATE " + @mysqlTable + " SET status='ON' WHERE device='Dining Lights'")
-                    end
+            if x10.has_key? (response.downcase)
+                if response.downcase.include? "on"
+                    server = arduinoParser(x10[response.downcase], "ON")
+                elsif response.downcase.include? "off"
+                    server = arduinoParser(x10[response.downcase], "OFF")
                 end
-            
-            elsif response.downcase.include? "office"
-                if response.downcase.include? "fan"
-                    server = arduinoParser("OfficeFan", "ON")
-                    if server.code == "200"
-                        say "The Office Fan is now ON!"
-                        con.query("UPDATE " + @mysqlTable + " SET status='ON' WHERE device='Office Fan'")
-                    end
+                if server.code == "200"
+                    say "The #{response} are now ON!"
                 end
             end
             
-        rescue Errno::EHOSTUNREACH
-            say "Sorry, I could not connect to your Arduino."
-        rescue Errno::ECONNREFUSED
-            say "Sorry, the Arduino is not running."
-        rescue Errno::ENETUNREACH
-            say "Sorry, Could not connect to the network."
-        rescue Errno::ETIMEDOUT
-            say "Sorry, The operation timed out."
-        end
-        request_completed
-    end
-    
-    listen_for /(turn (off|off the) (.+)|turn the (.+) off)/i do |response|
-        begin
-            if response.downcase.include? "dining room"
-                if response.downcase.include? "lights"
-                    server = arduinoParser("DRLights", "OFF")
-                    if server.code == "200"
-                        say "The Dining Room Lights are now OFF!"
-                        con.query("UPDATE " + @mysqlTable + " SET status='OFF' WHERE device='Dining Lights'")
-                    end
-                end
-            
-            elsif response.downcase.include? "office"
-                if response.downcase.include? "fan"
-                    server = arduinoParser("OfficeFan", "OFF")
-                    if server.code == "200"
-                        say "The Office Fan is now OFF!"
-                        con.query("UPDATE " + @mysqlTable + " SET status='OFF' WHERE device='Office Fan'")
-                    end
-                end
-            end
-                
         rescue Errno::EHOSTUNREACH
             say "Sorry, I could not connect to your Arduino."
         rescue Errno::ECONNREFUSED
@@ -97,6 +50,4 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         
         return resp;
     end
-    
-    con.close
 end
