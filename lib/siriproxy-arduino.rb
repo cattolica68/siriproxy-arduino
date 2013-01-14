@@ -16,19 +16,19 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
         @port = config["arduino_port"]
     end
     
-    x10 = Hash['dining room lights', "DRLights", 'dining room light', "DRLights", 'front porch lights', "FrontPorchLights", 'front porch light', "FrontPorchLights"]
+    x10 = Hash['dining room lights', "DRLights", 'front porch lights', "FrontPorchLights"]
     
     listen_for /((turn (on|on the|off|off the) (.+))|(turn the (.+) (on|off)))/i do |response|
         begin
             x10.each_key do |loc|
                 if response.downcase.include? loc
                     if response.downcase.include? "on"
-                        server = arduinoParser(x10[response.downcase], "ON")
+                        server = arduinoParser(x10[loc], "ON")
                     elsif response.downcase.include? "off"
-                        server = arduinoParser(x10[response.downcase], "OFF")
+                        server = arduinoParser(x10[loc], "OFF")
                     end
                     if server.code == "200"
-                        say "The #{response} are now ON!"
+                        say "The #{loc} are now ON!"
                     end
                 end
             end
