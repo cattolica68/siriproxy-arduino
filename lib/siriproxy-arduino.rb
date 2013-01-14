@@ -24,11 +24,14 @@ class SiriProxy::Plugin::Arduino < SiriProxy::Plugin
                 if response.downcase.include? loc
                     if response.downcase.include? "on"
                         server = arduinoParser(x10[loc], "ON")
+                        if server.code == "200"
+                            say "The #{loc}s are now ON!"
+                        end
                     elsif response.downcase.include? "off"
                         server = arduinoParser(x10[loc], "OFF")
-                    end
-                    if server.code == "200"
-                        say "The #{loc} are now ON!"
+                        if server.code == "200"
+                            say "The #{loc}s are now OFF!"
+                        end
                     end
                 end
             end
